@@ -6,6 +6,7 @@ SRC = ${CWD}/src
 ARCH = $(shell uname -m | sed s/arm64/aarch64/)
 OS = $(shell uname -s  | sed s/Darwin/macos/ | sed s/Linux/linux/)
 ZIG_PKG = --main-pkg-path ${CWD}
+ZIG_OPT = -OReleaseFast
 
 all: test
 
@@ -80,7 +81,11 @@ zigstr: ${BUILD}/zigstr/.${ZIGSTR_VERSION}
 
 
 test: zig zigstr ziglyph
-	zig run ${ZIG_PKG} ${SRC}/test.zig
+	zig build-exe ${ZIG_PKG} ${OPT} ${SRC}/test.zig
+	./test
+
+test1: zig zigstr ziglyph
+	zig test ${ZIG_PKG} ${ZIG_OPT} ${SRC}/test.zig
 
 clean:
 	rm -rf ${BUILD}
